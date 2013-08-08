@@ -35,8 +35,6 @@ window.PaperSections.slice = (val, max)->
 
 
 
-
-
 # window.PaperSections.animationLoop = ->
 # 	window.requestAnimationFrame(window.PaperSections.animationLoop)
 
