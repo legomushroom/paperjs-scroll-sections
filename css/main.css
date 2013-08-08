@@ -24,8 +24,8 @@ html {
   height: 100%;
   overflow: auto;
 }
-#wrapper .buttons-l {
-  padding: 125px 0 250px 0;
+#wrapper .menu-l {
+  position: relative;
   background: #69d2e7;
 /* Old browsers */
 /* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -42,7 +42,43 @@ html {
   background: linear-gradient(to bottom, #69d2e7 0%, #69d2e7 50%, #fe4365 51%, #fe4365 100%);
 /* W3C */
 }
-.section-l {
-  height: 300px;
-  margin-bottom: -125px;
+#wrapper .content-ll {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-size: 25px;
+  line-height: 30px;
+  -webkit-transform: rotate3d(0, 0, 0);
+  -moz-transform: rotate3d(0, 0, 0);
+  -ms-transform: rotate3d(0, 0, 0);
+  -o-transform: rotate3d(0, 0, 0);
+  transform: rotate3d(0, 0, 0);
+}
+.section-b {
+  height: 200px;
+  position: relative;
+  cursor: pointer;
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  -o-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+.section-b.is-check {
+  background-color: #f00;
+  z-index: 1;
+}
+.section-b:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -15px;
+  margin-left: -15px;
+  content: '';
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
 }

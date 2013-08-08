@@ -21,8 +21,8 @@ body, html
 	rect 100%
 	overflow auto
 	
-	.buttons-l
-		padding 125px 0 250px 0
+	.menu-l
+		position relative
 		background: rgb(105,210,231); /* Old browsers */
 		/* IE9 SVG, needs conditional override of 'filter' to 'none' */
 		// background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzY5ZDJlNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzY5ZDJlNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUxJSIgc3RvcC1jb2xvcj0iI2ZlNDM2NSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZTQzNjUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -33,12 +33,50 @@ body, html
 		background: -ms-linear-gradient(top,  rgba(105,210,231,1) 0%,rgba(105,210,231,1) 50%,rgba(254,67,101,1) 51%,rgba(254,67,101,1) 100%); /* IE10+ */
 		background: linear-gradient(to bottom,  rgba(105,210,231,1) 0%,rgba(105,210,231,1) 50%,rgba(254,67,101,1) 51%,rgba(254,67,101,1) 100%); /* W3C */
 		// filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#69d2e7', endColorstr='#fe4365',GradientType=0 ); /* IE6-8 */
-		
 
-.section-l
-	height 300px
-	margin-bottom -125px
+	.content-ll
+		position absolute
+		top 0
+		left 0
+		rect 100%
+		// max-height 100%
+		overflow hidden
 
+		font-size 25px
+		line-height 30px
+		-webkit-transform: rotate3d(0,0,0);
+		   -moz-transform: rotate3d(0,0,0);
+		    -ms-transform: rotate3d(0,0,0);
+		     -o-transform: rotate3d(0,0,0);
+		        transform: rotate3d(0,0,0);
+		// -webkit-transition: all .1s ease-in;
+		   // -moz-transition: all .1s ease-in;
+		     // -o-transition: all .1s ease-in;
+		        // transition: all .1s ease-in;
+
+
+.section-b
+	height 200px
+	position relative
+	cursor pointer
+	-webkit-transition: all .25s ease-in-out;
+	   -moz-transition: all .25s ease-in-out;
+	     -o-transition: all .25s ease-in-out;
+	        transition: all .25s ease-in-out;
+
+	&.is-check
+		background-color: red
+		z-index:  1
+	&:after
+		position absolute
+		top 50%
+		left 50%
+		margin-top -15px
+		margin-left -15px
+		content: ''
+		rect 30px
+		background-color white
+		border-radius 50%
 
 
 
