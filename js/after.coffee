@@ -32,12 +32,12 @@ gui = new dat.GUI
 gui.add window.PaperSections, 'invertScroll'
 
 
-$('.section-b').on 'click', ->
-	$('.section-b').removeClass 'is-check'
+$('.section-b').on 'mousedown', ->
 	$$ = $(@)
-	$$.css 
-		'height':	$('#wrapper').outerHeight()
-		'width':	$('#wrapper').outerWidth()
-		'margin':	"-#{$('#wrapper').outerHeight()}px 0"
+	console.log $$.index()
+	
 
-	$$.toggleClass 'is-check'
+
+
+
+

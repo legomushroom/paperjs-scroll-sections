@@ -51,15 +51,9 @@ gui = new dat.GUI;
 
 gui.add(window.PaperSections, 'invertScroll');
 
-$('.section-b').on('click', function() {
+$('.section-b').on('mousedown', function() {
   var $$;
 
-  $('.section-b').removeClass('is-check');
   $$ = $(this);
-  $$.css({
-    'height': $('#wrapper').outerHeight(),
-    'width': $('#wrapper').outerWidth(),
-    'margin': "-" + ($('#wrapper').outerHeight()) + "px 0"
-  });
-  return $$.toggleClass('is-check');
+  return console.log($$.index());
 });

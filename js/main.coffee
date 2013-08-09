@@ -56,7 +56,7 @@ class SSection
 		window.PaperSections.$container.on 'stopScroll', =>
 			window.PaperSections.stop = true
 			duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed*25), 1400) or 3000
-
+			console.log duration
 			@translatePointY(
 				point: 	@base.segments[1].handleOut
 				to: 		0
@@ -124,7 +124,7 @@ class Sections
 		for it,i in @contents
 			it.update()
 
-sections = new Sections
+window.PaperSections.sections = new Sections
 
 
 for i in [window.PaperSections.data.sectionscount..0]
@@ -133,10 +133,10 @@ for i in [window.PaperSections.data.sectionscount..0]
 		height: window.PaperSections.data.sectionheight + 5
 		color: window.PaperSections.data.colors[i]
 
-	sections.contents.push section
+	window.PaperSections.sections.contents.push section
 
 onFrame = (e)->
-	sections.update()
+	window.PaperSections.sections.update()
 
 
 
