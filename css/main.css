@@ -11,6 +11,22 @@ html {
   padding: 0;
   overflow: auto;
   font-family: monospace;
+  background-color: #eeebf0;
+}
+.iphone-l {
+  width: 600px;
+  height: 1061px;
+  margin: 0 auto;
+  margin-top: 50px;
+  background: transparent url("../i/iphone.png") no-repeat center center;
+  position: relative;
+}
+.iphone-l > .screen-ll {
+  position: absolute;
+  top: 185px;
+  left: 91px;
+  width: 416px;
+  height: 713px;
 }
 .touch {
   overflow: hidden !important;

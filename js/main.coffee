@@ -36,7 +36,7 @@ window.PaperSections.$canvas 	= $(view.canvas)
 window.PaperSections.data 	= window.PaperSections.$canvas.data()
 window.PaperSections.data.colors = window.PaperSections.data.colors.split ':'
 window.PaperSections.data.sectionscount ?= window.PaperSections.data.colors.length
-view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
+view.setViewSize window.PaperSections.$container.outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
 window.PaperSections.data.sectionheight = parseInt window.PaperSections.data.sectionheight
 # console.log window.PaperSections.data.sectionheight
 window.PaperSections.$content = $("##{window.PaperSections.data.contentid}")
@@ -269,7 +269,7 @@ $(window).on 'throttledresize', ->
 	window.PaperSections.sections.teardown()
 	delete window.PaperSections.sections
 	window.PaperSections.sections = new Sections
-	view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
+	view.setViewSize window.PaperSections.$container.outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
 	window.PaperSections.$container.scroll window.PaperSections.scrollControl
 
 

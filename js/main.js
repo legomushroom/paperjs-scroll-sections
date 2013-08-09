@@ -53,7 +53,7 @@ if ((_ref1 = (_base = window.PaperSections.data).sectionscount) == null) {
   _base.sectionscount = window.PaperSections.data.colors.length;
 }
 
-view.setViewSize($(window).outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
+view.setViewSize(window.PaperSections.$container.outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
 
 window.PaperSections.data.sectionheight = parseInt(window.PaperSections.data.sectionheight);
 
@@ -346,7 +346,7 @@ $(window).on('throttledresize', function() {
   window.PaperSections.sections.teardown();
   delete window.PaperSections.sections;
   window.PaperSections.sections = new Sections;
-  view.setViewSize($(window).outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
+  view.setViewSize(window.PaperSections.$container.outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
   return window.PaperSections.$container.scroll(window.PaperSections.scrollControl);
 });
 
