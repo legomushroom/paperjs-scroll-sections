@@ -59,10 +59,16 @@ body, html
 	height 200px
 	position relative
 	cursor pointer
-	-webkit-transition: all .25s ease-in-out;
-	   -moz-transition: all .25s ease-in-out;
-	     -o-transition: all .25s ease-in-out;
-	        transition: all .25s ease-in-out;
+
+	&:active
+		&:after
+			rect 60px
+			margin-top -30px
+			margin-left -30px
+			-webkit-transition: all .15s ease-out;
+			   -moz-transition: all .15s ease-out;
+			     -o-transition: all .15s ease-out;
+			        transition: all .15s ease-out;
 
 	&.is-check
 		// background-color: red

@@ -32,9 +32,10 @@ gui = new dat.GUI
 gui.add window.PaperSections, 'invertScroll'
 
 
-$('.section-b').on 'mousedown', ->
+$('.section-b').on 'click', ->
 	$$ = $(@)
-	console.log $$.index()
+	window.PaperSections.sections.popSection $$.index()
+	# console.log $$.index()
 	
 
 

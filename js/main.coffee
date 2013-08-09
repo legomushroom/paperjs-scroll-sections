@@ -28,8 +28,10 @@ window.PaperSections.data 	= window.PaperSections.$canvas.data()
 window.PaperSections.data.colors = window.PaperSections.data.colors.split ':'
 window.PaperSections.data.sectionscount ?= window.PaperSections.data.colors.length
 view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
-
+window.PaperSections.data.sectionheight = parseInt window.PaperSections.data.sectionheight
+# console.log window.PaperSections.data.sectionheight
 window.PaperSections.$content = $("##{window.PaperSections.data.contentid}")
+window.PaperSections.$sections = window.PaperSections.$content.children()
 
 class SSection
 	constructor:(o)->
@@ -50,13 +52,13 @@ class SSection
 	listenToStop:->
 		window.PaperSections.$container.on 'scroll', =>
 			window.PaperSections.stop = false
+			@poped = false
 			TWEEN.removeAll()
 
 
 		window.PaperSections.$container.on 'stopScroll', =>
 			window.PaperSections.stop = true
 			duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed*25), 1400) or 3000
-			console.log duration
 			@translatePointY(
 				point: 	@base.segments[1].handleOut
 				to: 		0
@@ -73,12 +75,14 @@ class SSection
 		dfr = new $.Deferred
 		mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration)
 		mTW.easing o.easing or TWEEN.Easing.Elastic.Out
-
+		it = @
 		mTW.onUpdate o.onUpdate or (a)->
 			o.point.y = @y
 			# window.PaperSections.$content.css 'top': "#{@y/2}px"
-			window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
-
+			
+			!it.poped and window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			# console.log 
+			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
 
 		mTW.onComplete =>
 			dfr.resolve()
@@ -107,7 +111,7 @@ class SSection
 		path
 
 	update:->
-		if !window.PaperSections.stop
+		if !window.PaperSections.stop and !@poped
 			@toppie window.PaperSections.scrollSpeed
 			@bottie window.PaperSections.scrollSpeed
 			# window.PaperSections.$content.css 'top': "#{window.PaperSections.scrollSpeed/2}px"
@@ -118,11 +122,106 @@ class SSection
 	procent:(base, percents)->
 		(base/100)*percents
 
+	pop:->
+		@poped = true
+		@popedCenter = true
+
+		@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		-window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+		).then =>
+			@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		0
+			).then =>
+
+			@translatePointY
+					point: 	@base.segments[3].handleOut
+					to: 		0
+
+		@translatePointY
+				point: 	@base.segments[3].handleOut
+				to: 		window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+
+		
+
+	popUP:->
+		@poped = true
+		@popedCenter = false
+
+		@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		-window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+
+		).then =>
+			@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		0
+			).then =>
+
+			@translatePointY
+					point: 	@base.segments[3].handleOut
+					to: 		0
+
+		@translatePointY
+				point: 	@base.segments[3].handleOut
+				to: 		-window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+
+		
+
+	popDOWN:->
+		@poped = true
+		@popedCenter = false
+		@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+		).then =>
+			@translatePointY(
+				point: 	@base.segments[1].handleOut
+				to: 		0
+			).then =>
+
+			@translatePointY
+					point: 	@base.segments[3].handleOut
+					to: 		0
+
+		@translatePointY
+				point: 	@base.segments[3].handleOut
+				to: 		window.PaperSections.data.sectionheight/1.75
+				duration: 100
+				easing:TWEEN.Easing.Linear.None
+
+
+
 class Sections
 	contents:[]
 	update:->
 		for it,i in @contents
 			it.update()
+
+	popSection:(n)->
+		TWEEN.removeAll()
+
+		for i in [@contents.length-1..0]
+			if i > @contents.length-n-1
+				@contents[i].popUP()
+
+			if @contents.length-n-1 is i
+				@contents[i].pop()
+
+			if i < @contents.length-n-1
+				@contents[i].popDOWN()
+
 
 window.PaperSections.sections = new Sections
 
@@ -132,7 +231,7 @@ for i in [window.PaperSections.data.sectionscount..0]
 		offset: (i*window.PaperSections.data.sectionheight) - 5
 		height: window.PaperSections.data.sectionheight + 5
 		color: window.PaperSections.data.colors[i]
-
+	section.index = i
 	window.PaperSections.sections.contents.push section
 
 onFrame = (e)->

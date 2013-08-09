@@ -41,7 +41,11 @@ if ((_ref1 = (_base = window.PaperSections.data).sectionscount) == null) {
 
 view.setViewSize($(window).outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
 
+window.PaperSections.data.sectionheight = parseInt(window.PaperSections.data.sectionheight);
+
 window.PaperSections.$content = $("#" + window.PaperSections.data.contentid);
+
+window.PaperSections.$sections = window.PaperSections.$content.children();
 
 SSection = (function() {
   function SSection(o) {
@@ -64,6 +68,7 @@ SSection = (function() {
 
     window.PaperSections.$container.on('scroll', function() {
       window.PaperSections.stop = false;
+      _this.poped = false;
       return TWEEN.removeAll();
     });
     return window.PaperSections.$container.on('stopScroll', function() {
@@ -71,7 +76,6 @@ SSection = (function() {
 
       window.PaperSections.stop = true;
       duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed * 25), 1400) || 3000;
-      console.log(duration);
       _this.translatePointY({
         point: _this.base.segments[1].handleOut,
         to: 0
@@ -86,15 +90,19 @@ SSection = (function() {
   };
 
   SSection.prototype.translatePointY = function(o) {
-    var dfr, mTW,
+    var dfr, it, mTW,
       _this = this;
 
     dfr = new $.Deferred;
     mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration);
     mTW.easing(o.easing || TWEEN.Easing.Elastic.Out);
+    it = this;
     mTW.onUpdate(o.onUpdate || function(a) {
       o.point.y = this.y;
-      return window.PaperSections.$content.css({
+      !it.poped && window.PaperSections.$content.css({
+        '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
+      });
+      return (it.poped && !it.popedCenter) && window.PaperSections.$sections.eq(it.index).css({
         '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
       });
     });
@@ -130,7 +138,7 @@ SSection = (function() {
   };
 
   SSection.prototype.update = function() {
-    if (!window.PaperSections.stop) {
+    if (!window.PaperSections.stop && !this.poped) {
       this.toppie(window.PaperSections.scrollSpeed);
       this.bottie(window.PaperSections.scrollSpeed);
       window.PaperSections.$content.css({
@@ -142,6 +150,90 @@ SSection = (function() {
 
   SSection.prototype.procent = function(base, percents) {
     return (base / 100) * percents;
+  };
+
+  SSection.prototype.pop = function() {
+    var _this = this;
+
+    this.poped = true;
+    this.popedCenter = true;
+    this.translatePointY({
+      point: this.base.segments[1].handleOut,
+      to: -window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    }).then(function() {
+      _this.translatePointY({
+        point: _this.base.segments[1].handleOut,
+        to: 0
+      }).then(function() {});
+      return _this.translatePointY({
+        point: _this.base.segments[3].handleOut,
+        to: 0
+      });
+    });
+    return this.translatePointY({
+      point: this.base.segments[3].handleOut,
+      to: window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    });
+  };
+
+  SSection.prototype.popUP = function() {
+    var _this = this;
+
+    this.poped = true;
+    this.popedCenter = false;
+    this.translatePointY({
+      point: this.base.segments[1].handleOut,
+      to: -window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    }).then(function() {
+      _this.translatePointY({
+        point: _this.base.segments[1].handleOut,
+        to: 0
+      }).then(function() {});
+      return _this.translatePointY({
+        point: _this.base.segments[3].handleOut,
+        to: 0
+      });
+    });
+    return this.translatePointY({
+      point: this.base.segments[3].handleOut,
+      to: -window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    });
+  };
+
+  SSection.prototype.popDOWN = function() {
+    var _this = this;
+
+    this.poped = true;
+    this.popedCenter = false;
+    this.translatePointY({
+      point: this.base.segments[1].handleOut,
+      to: window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    }).then(function() {
+      _this.translatePointY({
+        point: _this.base.segments[1].handleOut,
+        to: 0
+      }).then(function() {});
+      return _this.translatePointY({
+        point: _this.base.segments[3].handleOut,
+        to: 0
+      });
+    });
+    return this.translatePointY({
+      point: this.base.segments[3].handleOut,
+      to: window.PaperSections.data.sectionheight / 1.75,
+      duration: 100,
+      easing: TWEEN.Easing.Linear.None
+    });
   };
 
   return SSection;
@@ -165,6 +257,27 @@ Sections = (function() {
     return _results;
   };
 
+  Sections.prototype.popSection = function(n) {
+    var i, _i, _ref2, _results;
+
+    TWEEN.removeAll();
+    _results = [];
+    for (i = _i = _ref2 = this.contents.length - 1; _ref2 <= 0 ? _i <= 0 : _i >= 0; i = _ref2 <= 0 ? ++_i : --_i) {
+      if (i > this.contents.length - n - 1) {
+        this.contents[i].popUP();
+      }
+      if (this.contents.length - n - 1 === i) {
+        this.contents[i].pop();
+      }
+      if (i < this.contents.length - n - 1) {
+        _results.push(this.contents[i].popDOWN());
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+
   return Sections;
 
 })();
@@ -177,6 +290,7 @@ for (i = _i = _ref2 = window.PaperSections.data.sectionscount; _ref2 <= 0 ? _i <
     height: window.PaperSections.data.sectionheight + 5,
     color: window.PaperSections.data.colors[i]
   });
+  section.index = i;
   window.PaperSections.sections.contents.push(section);
 }
 

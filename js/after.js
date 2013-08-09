@@ -51,9 +51,9 @@ gui = new dat.GUI;
 
 gui.add(window.PaperSections, 'invertScroll');
 
-$('.section-b').on('mousedown', function() {
+$('.section-b').on('click', function() {
   var $$;
 
   $$ = $(this);
-  return console.log($$.index());
+  return window.PaperSections.sections.popSection($$.index());
 });
