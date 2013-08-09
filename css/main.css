@@ -63,10 +63,11 @@ html {
   cursor: pointer;
 }
 .section-b:active:after {
-  width: 60px;
-  height: 60px;
-  margin-top: -30px;
-  margin-left: -30px;
+  width: 76px;
+  height: 76px;
+  margin-top: -38px;
+  margin-left: -38px;
+  background-size: 100% 100%;
   -webkit-transition: all 0.15s ease-out;
   -moz-transition: all 0.15s ease-out;
   -o-transition: all 0.15s ease-out;
@@ -85,11 +86,57 @@ html {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -15px;
-  margin-left: -15px;
+  margin-top: -50px;
+  margin-left: -50px;
   content: '';
-  width: 30px;
-  height: 30px;
-  background-color: #fff;
-  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background: transparent url("/icons/icecreame.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/icecreame.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-watermellon:after {
+  background: transparent url("/icons/watermellon.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/watermellon.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-fish:after {
+  background: transparent url("/icons/fish.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/fish.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-donut:after {
+  background: transparent url("/icons/donut.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/donut.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-icecreame:after {
+  background: transparent url("/icons/icecreame2.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/icecreame2.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-bananas:after {
+  background: transparent url("/icons/bananas.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/bananas.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-drink:after {
+  background: transparent url("/icons/drink.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/drink.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-candies:after {
+  background: transparent url("/icons/candies.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/candies.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-pizza:after {
+  background: transparent url("/icons/pizza.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/pizza.png") no-repeat center center;
+  background-size: 100% 100%;
+}
+.section-b.is-china:after {
+  background: transparent url("/icons/china.png") no-repeat center center;
+  background: transparent url("/paperjs scroll sections/icons/china.png") no-repeat center center;
+  background-size: 100% 100%;
 }
