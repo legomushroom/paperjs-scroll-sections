@@ -19,7 +19,16 @@ h =
     	getRand:(min,max)->
         Math.floor((Math.random() * ((max + 1) - min)) + min)
 
+
+
 window.PaperSections ?= {}
+window.PaperSections.$container = $('#wrapper')
+window.PaperSections.i = 0
+window.PaperSections.next = 0
+window.PaperSections.prev = 0
+window.PaperSections.scrollSpeed = 0
+window.PaperSections.timeOut = null
+window.PaperSections.invertScroll = false
 
 windowHeight = $(window).outerHeight()
 
@@ -32,6 +41,12 @@ window.PaperSections.data.sectionheight = parseInt window.PaperSections.data.sec
 # console.log window.PaperSections.data.sectionheight
 window.PaperSections.$content = $("##{window.PaperSections.data.contentid}")
 window.PaperSections.$sections = window.PaperSections.$content.children()
+
+
+window.PaperSections.slice = (val, max)->
+	if val > 0 and val > max then return Math.min val, max
+	if val < 0 and val < max then return Math.max val, - max
+	val
 
 class SSection
 	constructor:(o)->
@@ -69,6 +84,10 @@ class SSection
 			@translatePointY
 				point: 	@base.segments[3].handleOut
 				to: 		0
+
+	notListenToStop:->
+		window.PaperSections.$container.off 'stopScroll'
+		window.PaperSections.$container.off 'scroll'
 
 
 	translatePointY:(o)->
@@ -204,7 +223,16 @@ class SSection
 
 
 class Sections
-	contents:[]
+	constructor:->
+		@contents ?= []
+		for i in [window.PaperSections.data.sectionscount..0]
+			section = new SSection
+				offset: (i*window.PaperSections.data.sectionheight) - 5
+				height: window.PaperSections.data.sectionheight + 5
+				color: window.PaperSections.data.colors[i]
+			section.index = i
+			@contents.push section
+
 	update:->
 		for it,i in @contents
 			it.update()
@@ -222,27 +250,53 @@ class Sections
 			if i < @contents.length-n-1
 				@contents[i].popDOWN()
 
+	teardown:->
+		for i in [@contents.length-1..0]
+			@contents[i].base.remove()
+			@contents[i].notListenToStop()
+			delete @contents[i]
+
 
 window.PaperSections.sections = new Sections
 
 
-for i in [window.PaperSections.data.sectionscount..0]
-	section = new SSection
-		offset: (i*window.PaperSections.data.sectionheight) - 5
-		height: window.PaperSections.data.sectionheight + 5
-		color: window.PaperSections.data.colors[i]
-	section.index = i
-	window.PaperSections.sections.contents.push section
 
 onFrame = (e)->
 	window.PaperSections.sections.update()
 
 
+$(window).on 'throttledresize', ->
+	window.PaperSections.sections.teardown()
+	delete window.PaperSections.sections
+	window.PaperSections.sections = new Sections
+	view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
+	window.PaperSections.$container.scroll window.PaperSections.scrollControl
 
 
+window.PaperSections.scrollControl = (e)->
+	clearTimeout window.PaperSections.timeOut
+	window.PaperSections.timeOut = setTimeout ->
+		window.PaperSections.i = 0
+		window.PaperSections.$container.trigger 'stopScroll'
+		window.PaperSections.prev = window.PaperSections.$container.scrollTop()
+	, 50
+
+	if window.PaperSections.i % 5 is 0
+		direction = if window.PaperSections.invertScroll then -1 else 1
+		window.PaperSections.next = window.PaperSections.$container.scrollTop()
+		window.PaperSections.scrollSpeed = direction*window.PaperSections.slice (window.PaperSections.next - window.PaperSections.prev), window.PaperSections.data.sectionheight/2
+		window.PaperSections.prev = window.PaperSections.next
+	window.PaperSections.i++
+
+window.PaperSections.$container.scroll window.PaperSections.scrollControl
+
+gui = new dat.GUI
+gui.add window.PaperSections, 'invertScroll'
 
 
-
+$('.section-b').on 'click', ->
+	$$ = $(@)
+	window.PaperSections.sections.popSection $$.index()
 
 
 
