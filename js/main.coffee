@@ -95,16 +95,24 @@ class SSection
 			o.point.y = @y
 			# window.PaperSections.$content.css 'top': "#{@y/2}px"
 			
-			!it.poped and window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			!it.poped and window.PaperSections.$content.css it.getPrefixed(@y/2)
 			# console.log 
-			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).css  it.getPrefixed(@y/2)
 
 		mTW.onComplete =>
 			dfr.resolve()
 
 		mTW.start()
 		dfr.promise()
-		
+
+	getPrefixed:(value)->
+		a = 
+			'-webkit-transform': "translate3d(0,#{value}px,0)"
+			'-moz-transform': "translate3d(0,#{value}px,0)"
+			'-ms-transform': "translate3d(0,#{value}px,0)"
+			'-o-transform': "translate3d(0,#{value}px,0)"
+			'transform': "translate3d(0,#{value}px,0)"
+
 
 	makeBase:->
 		@base = new Path.Rectangle new Point(0, @o.offset), [@wh, @o.height]
@@ -130,7 +138,7 @@ class SSection
 			@toppie window.PaperSections.scrollSpeed
 			@bottie window.PaperSections.scrollSpeed
 			# window.PaperSections.$content.css 'top': "#{window.PaperSections.scrollSpeed/2}px"
-			window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0)"
+			window.PaperSections.$content.css @getPrefixed(window.PaperSections.scrollSpeed/2)
 
 		TWEEN.update()
 

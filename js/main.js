@@ -120,18 +120,26 @@ SSection = (function() {
     it = this;
     mTW.onUpdate(o.onUpdate || function(a) {
       o.point.y = this.y;
-      !it.poped && window.PaperSections.$content.css({
-        '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
-      });
-      return (it.poped && !it.popedCenter) && window.PaperSections.$sections.eq(it.index).css({
-        '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
-      });
+      !it.poped && window.PaperSections.$content.css(it.getPrefixed(this.y / 2));
+      return (it.poped && !it.popedCenter) && window.PaperSections.$sections.eq(it.index).css(it.getPrefixed(this.y / 2));
     });
     mTW.onComplete(function() {
       return dfr.resolve();
     });
     mTW.start();
     return dfr.promise();
+  };
+
+  SSection.prototype.getPrefixed = function(value) {
+    var a;
+
+    return a = {
+      '-webkit-transform': "translate3d(0," + value + "px,0)",
+      '-moz-transform': "translate3d(0," + value + "px,0)",
+      '-ms-transform': "translate3d(0," + value + "px,0)",
+      '-o-transform': "translate3d(0," + value + "px,0)",
+      'transform': "translate3d(0," + value + "px,0)"
+    };
   };
 
   SSection.prototype.makeBase = function() {
@@ -162,9 +170,7 @@ SSection = (function() {
     if (!window.PaperSections.stop && !this.poped) {
       this.toppie(window.PaperSections.scrollSpeed);
       this.bottie(window.PaperSections.scrollSpeed);
-      window.PaperSections.$content.css({
-        '-webkit-transform': "translate3d(0," + (window.PaperSections.scrollSpeed / 2) + "px,0)"
-      });
+      window.PaperSections.$content.css(this.getPrefixed(window.PaperSections.scrollSpeed / 2));
     }
     return TWEEN.update();
   };
