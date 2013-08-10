@@ -265,7 +265,7 @@ mwheel = (e, d)->
 	if $$.scrollTop() is 0 and d > 0
 		e.stopPropagation()
 		e.preventDefault()
-	if d < 0 and ($$.scrollTop() is $content[0].scrollHeight - window.PaperSections.$container.height())
+	if d < 0 and ($$.scrollTop() is ($content[0].scrollHeight - window.PaperSections.$container.height()))
 		e.stopPropagation()
 		e.preventDefault()
 
@@ -285,8 +285,6 @@ window.PaperSections.$container.on 'mousewheel', mwheel
 
 
 window.PaperSections.scrollControl = (e, d)->
-	
-
 
 	clearTimeout window.PaperSections.timeOut
 	window.PaperSections.timeOut = setTimeout ->
@@ -313,6 +311,5 @@ gui.add window.PaperSections, 'invertScroll'
 $('.section-b').on 'click', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
-
-
+	console.log 'click'
 

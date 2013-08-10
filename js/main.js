@@ -343,7 +343,7 @@ mwheel = function(e, d) {
     e.stopPropagation();
     e.preventDefault();
   }
-  if (d < 0 && ($$.scrollTop() === $content[0].scrollHeight - window.PaperSections.$container.height())) {
+  if (d < 0 && ($$.scrollTop() === ($content[0].scrollHeight - window.PaperSections.$container.height()))) {
     e.stopPropagation();
     return e.preventDefault();
   }
@@ -391,5 +391,6 @@ $('.section-b').on('click', function() {
   var $$;
 
   $$ = $(this);
-  return window.PaperSections.sections.popSection($$.index());
+  window.PaperSections.sections.popSection($$.index());
+  return console.log('click');
 });
