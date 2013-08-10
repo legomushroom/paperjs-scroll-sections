@@ -83,6 +83,10 @@ html {
   -ms-transform: rotate3d(0, 0, 0);
   -o-transform: rotate3d(0, 0, 0);
   transform: rotate3d(0, 0, 0);
+  -webkit-transition: transform 0.05s linear;
+  -moz-transition: transform 0.05s linear;
+  -o-transition: transform 0.05s linear;
+  transition: transform 0.05s linear;
 }
 .section-b {
   height: 200px;

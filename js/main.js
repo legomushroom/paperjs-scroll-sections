@@ -75,9 +75,19 @@ SSection = (function() {
     this.gapSize = this.procent(this.h, (100 - this.ph) / 2);
     this.colors = ['#69d2e7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900'];
     this.twns = [];
+    this.getPrefix();
     this.makeBase();
     this.listenToStop();
   }
+
+  SSection.prototype.getPrefix = function() {
+    var pre, styles;
+
+    styles = window.getComputedStyle(document.documentElement, "");
+    pre = (Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) || (styles.OLink === "" && ["", "o"]))[1];
+    this.prefix = "-" + pre + "-";
+    return this.transformPrefix = "" + this.prefix + "transform";
+  };
 
   SSection.prototype.listenToStop = function() {
     var _this = this;
@@ -120,12 +130,8 @@ SSection = (function() {
     it = this;
     mTW.onUpdate(o.onUpdate || function(a) {
       o.point.y = this.y;
-      !it.poped && window.PaperSections.$content.css({
-        '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
-      });
-      return (it.poped && !it.popedCenter) && window.PaperSections.$sections.eq(it.index).css({
-        '-webkit-transform': "translate3d(0," + (this.y / 2) + "px,0)"
-      });
+      !it.poped && window.PaperSections.$content.attr('style', "" + it.transformPrefix + ": translate3d(0," + (this.y / 2) + "px,0);transform: translate3d(0," + (this.y / 2) + "px,0);");
+      return (it.poped && !it.popedCenter) && window.PaperSections.$sections.eq(it.index).attr('style', "" + it.transformPrefix + ": translate3d(0," + (this.y / 2) + "px,0);transform: translate3d(0," + (this.y / 2) + "px,0);");
     });
     mTW.onComplete(function() {
       return dfr.resolve();
@@ -162,9 +168,7 @@ SSection = (function() {
     if (!window.PaperSections.stop && !this.poped) {
       this.toppie(window.PaperSections.scrollSpeed);
       this.bottie(window.PaperSections.scrollSpeed);
-      window.PaperSections.$content.css({
-        '-webkit-transform': "translate3d(0," + (window.PaperSections.scrollSpeed / 2) + "px,0)"
-      });
+      window.PaperSections.$content.attr('style', "" + this.transformPrefix + ": translate3d(0," + (window.PaperSections.scrollSpeed / 2) + "px,0);transform: translate3d(0," + (window.PaperSections.scrollSpeed / 2) + "px,0);");
     }
     return TWEEN.update();
   };

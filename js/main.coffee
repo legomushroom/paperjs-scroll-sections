@@ -57,8 +57,17 @@ class SSection
 		@colors = ['#69d2e7','#A7DBD8','#E0E4CC','#F38630','#FA6900']
 		@twns = []
 		
+		@getPrefix()
 		@makeBase()
 		@listenToStop()
+
+	getPrefix:->
+		styles = window.getComputedStyle(document.documentElement, "")
+		pre = (Array::slice.call(styles).join("").match(/-(moz|webkit|ms)-/) or (styles.OLink is "" and ["", "o"]))[1]
+		@prefix = "-" + pre + "-"
+		@transformPrefix = "#{@prefix}transform"
+
+
 
 	listenToStop:->
 		window.PaperSections.$container.on 'scroll', =>
@@ -95,16 +104,16 @@ class SSection
 			o.point.y = @y
 			# window.PaperSections.$content.css 'top': "#{@y/2}px"
 			
-			!it.poped and window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+		
+			!it.poped and window.PaperSections.$content.attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 			# console.log 
-			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 
 		mTW.onComplete =>
 			dfr.resolve()
 
 		mTW.start()
 		dfr.promise()
-		
 
 	makeBase:->
 		@base = new Path.Rectangle new Point(0, @o.offset), [@wh, @o.height]
@@ -130,7 +139,7 @@ class SSection
 			@toppie window.PaperSections.scrollSpeed
 			@bottie window.PaperSections.scrollSpeed
 			# window.PaperSections.$content.css 'top': "#{window.PaperSections.scrollSpeed/2}px"
-			window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0)"
+			window.PaperSections.$content.attr 'style', "#{@transformPrefix}: translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0);transform: translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0);"
 
 		TWEEN.update()
 
