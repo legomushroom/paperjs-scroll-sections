@@ -10,7 +10,19 @@ body, html
 	overflow auto
 	font-family monospace
 	background-color #eeebf0
+	position relative
 
+.suggest-l
+	rect 300px
+	background transparent url("../i/suggest.png") no-repeat center center
+	position absolute
+	top 50%
+	left 50%
+	margin-left 200px
+	margin-top -200px
+
+
+	
 .iphone-l
 	width 600px
 	height 1061px
@@ -165,5 +177,15 @@ body, html
 			background-size 100% 100%
 				
 
-
+@media all and (max-width:930px){
+	.suggest-l{
+		margin-left -150px
+		top 0
+		margin-top 0
+	}
+	.iphone-l{
+		margin 0 auto
+		margin-top 250px 
+	}
+}
 
