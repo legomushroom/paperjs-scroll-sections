@@ -57,3 +57,7 @@ $('.section-b').on('click', function() {
   $$ = $(this);
   return window.PaperSections.sections.popSection($$.index());
 });
+
+/*
+//@ sourceMappingURL=after.map
+*/

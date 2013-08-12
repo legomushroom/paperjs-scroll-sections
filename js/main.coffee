@@ -38,7 +38,6 @@ window.PaperSections.data.colors = window.PaperSections.data.colors.split ':'
 window.PaperSections.data.sectionscount ?= window.PaperSections.data.colors.length
 view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
 window.PaperSections.data.sectionheight = parseInt window.PaperSections.data.sectionheight
-# console.log window.PaperSections.data.sectionheight
 window.PaperSections.$content = $("##{window.PaperSections.data.contentid}")
 window.PaperSections.$sections = window.PaperSections.$content.children()
 
@@ -61,8 +60,17 @@ class SSection
 		@colors = ['#69d2e7','#A7DBD8','#E0E4CC','#F38630','#FA6900']
 		@twns = []
 		
+		@getPrefix()
+		
 		@makeBase()
 		@listenToStop()
+
+
+	getPrefix:->
+		styles = window.getComputedStyle(document.documentElement, "")
+		pre = (Array::slice.call(styles).join("").match(/-(moz|webkit|ms)-/) or (styles.OLink is "" and ["", "o"]))[1]
+		@prefix = "-" + pre + "-"
+		@transformPrefix = "#{@prefix}transform"
 
 	listenToStop:->
 		window.PaperSections.$container.on 'scroll', =>

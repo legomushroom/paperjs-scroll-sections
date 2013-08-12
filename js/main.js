@@ -83,9 +83,19 @@ SSection = (function() {
     this.gapSize = this.procent(this.h, (100 - this.ph) / 2);
     this.colors = ['#69d2e7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900'];
     this.twns = [];
+    this.getPrefix();
     this.makeBase();
     this.listenToStop();
   }
+
+  SSection.prototype.getPrefix = function() {
+    var pre, styles;
+
+    styles = window.getComputedStyle(document.documentElement, "");
+    pre = (Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) || (styles.OLink === "" && ["", "o"]))[1];
+    this.prefix = "-" + pre + "-";
+    return this.transformPrefix = "" + this.prefix + "transform";
+  };
 
   SSection.prototype.listenToStop = function() {
     var _this = this;
@@ -380,3 +390,7 @@ $('.section-b').on('click', function() {
   $$ = $(this);
   return window.PaperSections.sections.popSection($$.index());
 });
+
+/*
+//@ sourceMappingURL=main.map
+*/
