@@ -30,8 +30,13 @@ window.PaperSections = {
   prev: 0,
   scrollSpeed: 0,
   timeOut: null,
-  invertScroll: true
+  invertScroll: true,
+  currSection: -1
 };
+
+window.PaperSections.ff = typeof InstallTrigger !== 'undefined';
+
+window.PaperSections.win = navigator.appVersion.indexOf("Win") !== -1;
 
 windowHeight = $(window).outerHeight();
 
@@ -100,19 +105,43 @@ SSection = (function() {
     return window.PaperSections.$container.on('stopScroll', function() {
       var duration;
 
+      console.clear();
       window.PaperSections.stop = true;
       duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed * 25), 1400) || 3000;
       _this.translatePointY({
         point: _this.base.segments[1].handleOut,
-        to: 0
+        to: 0,
+        duration: duration
       }).then(function() {
         return window.PaperSections.scrollSpeed = 0;
       });
       return _this.translatePointY({
         point: _this.base.segments[3].handleOut,
-        to: 0
+        to: 0,
+        duration: duration
       });
     });
+  };
+
+  SSection.prototype.translateLine = function(o) {
+    var dfr, it, mTW,
+      _this = this;
+
+    dfr = new $.Deferred;
+    mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration);
+    mTW.easing(o.easing || TWEEN.Easing.Elastic.Out);
+    it = this;
+    mTW.onUpdate(o.onUpdate || function(a) {
+      var _ref1;
+
+      o.point.y = this.y;
+      return (_ref1 = o.point2) != null ? _ref1.y = this.y : void 0;
+    });
+    mTW.onComplete(function() {
+      return dfr.resolve();
+    });
+    mTW.start();
+    return dfr.promise();
   };
 
   SSection.prototype.notListenToStop = function() {
@@ -391,10 +420,23 @@ gui = new dat.GUI;
 
 gui.add(window.PaperSections, 'invertScroll');
 
+$('.section-b').on('mouseenter', function() {
+  return window.PaperSections.currSection = $(this).index();
+});
+
 $('.section-b').on('click', function() {
   var $$;
 
   $$ = $(this);
-  window.PaperSections.sections.popSection($$.index());
-  return console.log('click');
+  return window.PaperSections.sections.popSection($$.index());
 });
+
+console.log(window.PaperSections.win);
+
+console.log(window.PaperSections.ff);
+
+console.log(navigator);
+
+if (window.PaperSections.win || window.PaperSections.ff) {
+  window.PaperSections.$container.addClass('is-with-scroll');
+}

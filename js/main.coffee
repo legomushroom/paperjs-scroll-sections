@@ -15,8 +15,6 @@ h =
     	getRand:(min,max)->
         Math.floor((Math.random() * ((max + 1) - min)) + min)
 
-
-
 window.PaperSections = 
 	$container: $('#wrapper')
 	i: 0
@@ -25,6 +23,11 @@ window.PaperSections =
 	scrollSpeed: 0
 	timeOut: null
 	invertScroll: true
+	currSection: -1
+
+
+window.PaperSections.ff  = typeof InstallTrigger isnt 'undefined'
+window.PaperSections.win = navigator.appVersion.indexOf("Win") isnt -1
 
 windowHeight = $(window).outerHeight()
 
@@ -76,19 +79,79 @@ class SSection
 			TWEEN.removeAll()
 
 
+
+
 		window.PaperSections.$container.on 'stopScroll', =>
+			console.clear()
+
 			window.PaperSections.stop = true
 			duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed*25), 1400) or 3000
 			@translatePointY(
 				point: 	@base.segments[1].handleOut
 				to: 		0
+				duration: duration
 			).then =>
 				window.PaperSections.scrollSpeed = 0
-
 
 			@translatePointY
 				point: 	@base.segments[3].handleOut
 				to: 		0
+				duration: duration
+
+			# console.log @base.position
+
+
+			# if window.PaperSections.scrollSpeed < 0
+			# 	if @index is window.PaperSections.currSection
+			# 		@translateSide
+			# 			point: @base.segments[0].point
+			# 			point2: @base.segments[3].point
+
+			# 	if @index > window.PaperSections.currSection
+
+
+			# 		@translateSide
+			# 			point: @base.segments[0].point
+			# 			point2: @base.segments[3].point
+
+
+			# 		@translateSide
+			# 			point: @base.segments[1].point
+			# 			point2: @base.segments[2].point
+
+
+	# translateSide:(o)->
+	# 	aa = new Point o.point
+	# 	@translateLine(
+	# 		point: o.point
+	# 		point2: o.point2
+	# 		to: o.point - (window.PaperSections.scrollSpeed/2)
+	# 		easing: TWEEN.Easing.Linear.None
+	# 		duration: 400
+	# 	).then =>
+
+
+	# 		@translateLine
+	# 			point: o.point
+	# 			point2: o.point2
+	# 			to: aa
+	# 			duration: 3000
+
+	translateLine:(o)->
+		dfr = new $.Deferred
+		mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration)
+		mTW.easing o.easing or TWEEN.Easing.Elastic.Out
+		it = @
+		mTW.onUpdate o.onUpdate or (a)->
+			o.point.y = @y
+			o.point2?.y = @y
+
+		mTW.onComplete =>
+			dfr.resolve()
+
+		mTW.start()
+		dfr.promise()
+
 
 	notListenToStop:->
 		window.PaperSections.$container.off 'stopScroll'
@@ -102,11 +165,8 @@ class SSection
 		it = @
 		mTW.onUpdate o.onUpdate or (a)->
 			o.point.y = @y
-			# window.PaperSections.$content.css 'top': "#{@y/2}px"
-			
 		
 			!it.poped and window.PaperSections.$content.attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
-			# console.log 
 			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 
 		mTW.onComplete =>
@@ -114,6 +174,9 @@ class SSection
 
 		mTW.start()
 		dfr.promise()
+
+
+	
 
 	makeBase:->
 		@base = new Path.Rectangle new Point(0, @o.offset), [@wh, @o.height]
@@ -317,8 +380,19 @@ gui = new dat.GUI
 gui.add window.PaperSections, 'invertScroll'
 
 
+
+$('.section-b').on 'mouseenter', ->
+	window.PaperSections.currSection = $(@).index()
+
 $('.section-b').on 'click', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
-	console.log 'click'
+
+console.log window.PaperSections.win
+console.log window.PaperSections.ff
+console.log navigator
+
+if window.PaperSections.win or window.PaperSections.ff then window.PaperSections.$container.addClass 'is-with-scroll'
+
+
 
