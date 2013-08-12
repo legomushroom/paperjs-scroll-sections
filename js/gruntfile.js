@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         separator: ";"
       },
       dist: {
-        src: ["js/lib/jquery-2.0.1.js", "js/lib/jquery.mousewheel.js", "js/lib/tween.min.js", "js/lib/dat.gui.min.js", "js/lib/paper.js"],
+        src: ["js/lib/jquery-2.0.1.js", "js/lib/jq-events.js", "js/lib/jquery.mousewheel.js", "js/lib/tween.min.js", "js/lib/dat.gui.min.js", "js/lib/paper.js"],
         dest: "dist/<%= pkg.name %>.js"
       }
     },

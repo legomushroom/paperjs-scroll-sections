@@ -112,15 +112,38 @@ SSection = (function() {
       duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed * 25), 1400) || 3000;
       _this.translatePointY({
         point: _this.base.segments[1].handleOut,
-        to: 0
+        to: 0,
+        duration: duration
       }).then(function() {
         return window.PaperSections.scrollSpeed = 0;
       });
       return _this.translatePointY({
         point: _this.base.segments[3].handleOut,
-        to: 0
+        to: 0,
+        duration: duration
       });
     });
+  };
+
+  SSection.prototype.translateLine = function(o) {
+    var dfr, it, mTW,
+      _this = this;
+
+    dfr = new $.Deferred;
+    mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration);
+    mTW.easing(o.easing || TWEEN.Easing.Elastic.Out);
+    it = this;
+    mTW.onUpdate(o.onUpdate || function(a) {
+      var _ref2;
+
+      o.point.y = this.y;
+      return (_ref2 = o.point2) != null ? _ref2.y = this.y : void 0;
+    });
+    mTW.onComplete(function() {
+      return dfr.resolve();
+    });
+    mTW.start();
+    return dfr.promise();
   };
 
   SSection.prototype.notListenToStop = function() {
@@ -362,6 +385,7 @@ mwheel = function(e, d) {
 };
 
 $(window).on('throttledresize', function() {
+  console.log('resize');
   window.PaperSections.$container.off('scroll');
   window.PaperSections.$container.off('mousewheel');
   window.PaperSections.sections.teardown();

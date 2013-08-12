@@ -61,16 +61,15 @@ class SSection
 		@twns = []
 		
 		@getPrefix()
-		
 		@makeBase()
 		@listenToStop()
-
 
 	getPrefix:->
 		styles = window.getComputedStyle(document.documentElement, "")
 		pre = (Array::slice.call(styles).join("").match(/-(moz|webkit|ms)-/) or (styles.OLink is "" and ["", "o"]))[1]
 		@prefix = "-" + pre + "-"
 		@transformPrefix = "#{@prefix}transform"
+
 
 	listenToStop:->
 		window.PaperSections.$container.on 'scroll', =>
@@ -79,19 +78,39 @@ class SSection
 			TWEEN.removeAll()
 
 
+
+
 		window.PaperSections.$container.on 'stopScroll', =>
 			window.PaperSections.stop = true
 			duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed*25), 1400) or 3000
 			@translatePointY(
 				point: 	@base.segments[1].handleOut
 				to: 		0
+				duration: duration
 			).then =>
 				window.PaperSections.scrollSpeed = 0
-
 
 			@translatePointY
 				point: 	@base.segments[3].handleOut
 				to: 		0
+				duration: duration
+
+
+	translateLine:(o)->
+		dfr = new $.Deferred
+		mTW = new TWEEN.Tween(new Point(o.point)).to(new Point(o.to), o.duration)
+		mTW.easing o.easing or TWEEN.Easing.Elastic.Out
+		it = @
+		mTW.onUpdate o.onUpdate or (a)->
+			o.point.y = @y
+			o.point2?.y = @y
+
+		mTW.onComplete =>
+			dfr.resolve()
+
+		mTW.start()
+		dfr.promise()
+
 
 	notListenToStop:->
 		window.PaperSections.$container.off 'stopScroll'
@@ -105,10 +124,8 @@ class SSection
 		it = @
 		mTW.onUpdate o.onUpdate or (a)->
 			o.point.y = @y
-			# window.PaperSections.$content.css 'top': "#{@y/2}px"
-			
+		
 			!it.poped and window.PaperSections.$content.attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
-			# console.log 
 			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 
 		mTW.onComplete =>
@@ -116,7 +133,9 @@ class SSection
 
 		mTW.start()
 		dfr.promise()
-		
+
+
+	
 
 	makeBase:->
 		@base = new Path.Rectangle new Point(0, @o.offset), [@wh, @o.height]
@@ -282,6 +301,7 @@ mwheel = (e, d)->
 		e.preventDefault()
 
 $(window).on 'throttledresize', ->
+	console.log 'resize'
 	window.PaperSections.$container.off 'scroll'
 	window.PaperSections.$container.off 'mousewheel'
 	window.PaperSections.sections.teardown()
