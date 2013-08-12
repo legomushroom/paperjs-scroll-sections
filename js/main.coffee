@@ -28,7 +28,7 @@ window.PaperSections.next = 0
 window.PaperSections.prev = 0
 window.PaperSections.scrollSpeed = 0
 window.PaperSections.timeOut = null
-window.PaperSections.invertScroll = false
+window.PaperSections.invertScroll = true
 
 windowHeight = $(window).outerHeight()
 
@@ -268,20 +268,36 @@ class Sections
 window.PaperSections.sections = new Sections
 
 
-
 onFrame = (e)->
 	window.PaperSections.sections.update()
 
+mwheel = (e, d)->
+	$content = $('#js-content')
+	$$ = $ @
+	if $$.scrollTop() is 0 and d > 0
+		e.stopPropagation()
+		e.preventDefault()
+	if d < 0 and ($$.scrollTop() is ($content[0].scrollHeight - window.PaperSections.$container.height()))
+		e.stopPropagation()
+		e.preventDefault()
 
 $(window).on 'throttledresize', ->
+	window.PaperSections.$container.off 'scroll'
+	window.PaperSections.$container.off 'mousewheel'
 	window.PaperSections.sections.teardown()
 	delete window.PaperSections.sections
 	window.PaperSections.sections = new Sections
-	view.setViewSize $(window).outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
+	view.setViewSize window.PaperSections.$container.outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
 	window.PaperSections.$container.scroll window.PaperSections.scrollControl
+	window.PaperSections.$container.on 'mousewheel', mwheel
+
+window.PaperSections.$container.on 'mousewheel', mwheel
 
 
-window.PaperSections.scrollControl = (e)->
+
+
+window.PaperSections.scrollControl = (e, d)->
+
 	clearTimeout window.PaperSections.timeOut
 	window.PaperSections.timeOut = setTimeout ->
 		window.PaperSections.i = 0
@@ -289,12 +305,14 @@ window.PaperSections.scrollControl = (e)->
 		window.PaperSections.prev = window.PaperSections.$container.scrollTop()
 	, 50
 
-	if window.PaperSections.i % 5 is 0
+	if window.PaperSections.i % 4 is 0
 		direction = if window.PaperSections.invertScroll then -1 else 1
 		window.PaperSections.next = window.PaperSections.$container.scrollTop()
-		window.PaperSections.scrollSpeed = direction*window.PaperSections.slice (window.PaperSections.next - window.PaperSections.prev), window.PaperSections.data.sectionheight/2
+		window.PaperSections.scrollSpeed = direction*window.PaperSections.slice 1.2*(window.PaperSections.next - window.PaperSections.prev), window.PaperSections.data.sectionheight/2
 		window.PaperSections.prev = window.PaperSections.next
 	window.PaperSections.i++
+
+	false
 
 window.PaperSections.$container.scroll window.PaperSections.scrollControl
 
@@ -302,9 +320,15 @@ gui = new dat.GUI
 gui.add window.PaperSections, 'invertScroll'
 
 
+
+$('.section-b').on 'mouseenter', ->
+	window.PaperSections.currSection = $(@).index()
+
 $('.section-b').on 'click', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
+
+if window.PaperSections.win or window.PaperSections.ff then window.PaperSections.$container.addClass 'is-with-scroll'
 
 
 
