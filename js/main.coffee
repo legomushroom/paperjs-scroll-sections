@@ -71,7 +71,6 @@ class SSection
 		@transformPrefix = "#{@prefix}transform"
 
 
-
 	listenToStop:->
 		window.PaperSections.$container.on 'scroll', =>
 			window.PaperSections.stop = false
@@ -96,44 +95,6 @@ class SSection
 				to: 		0
 				duration: duration
 
-			# console.log @base.position
-
-
-			# if window.PaperSections.scrollSpeed < 0
-			# 	if @index is window.PaperSections.currSection
-			# 		@translateSide
-			# 			point: @base.segments[0].point
-			# 			point2: @base.segments[3].point
-
-			# 	if @index > window.PaperSections.currSection
-
-
-			# 		@translateSide
-			# 			point: @base.segments[0].point
-			# 			point2: @base.segments[3].point
-
-
-			# 		@translateSide
-			# 			point: @base.segments[1].point
-			# 			point2: @base.segments[2].point
-
-
-	# translateSide:(o)->
-	# 	aa = new Point o.point
-	# 	@translateLine(
-	# 		point: o.point
-	# 		point2: o.point2
-	# 		to: o.point - (window.PaperSections.scrollSpeed/2)
-	# 		easing: TWEEN.Easing.Linear.None
-	# 		duration: 400
-	# 	).then =>
-
-
-	# 		@translateLine
-	# 			point: o.point
-	# 			point2: o.point2
-	# 			to: aa
-	# 			duration: 3000
 
 	translateLine:(o)->
 		dfr = new $.Deferred
