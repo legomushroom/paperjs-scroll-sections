@@ -107,9 +107,9 @@ class SSection
 			o.point.y = @y
 			# window.PaperSections.$content.css 'top': "#{@y/2}px"
 			
-			!it.poped and window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			!it.poped and window.PaperSections.$content.attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 			# console.log 
-			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).css '-webkit-transform': "translate3d(0,#{@y/2}px,0)"
+			(it.poped and !it.popedCenter) and window.PaperSections.$sections.eq(it.index).attr 'style', "#{it.transformPrefix}: translate3d(0,#{@y/2}px,0);transform: translate3d(0,#{@y/2}px,0);"
 
 		mTW.onComplete =>
 			dfr.resolve()
@@ -142,7 +142,7 @@ class SSection
 			@toppie window.PaperSections.scrollSpeed
 			@bottie window.PaperSections.scrollSpeed
 			# window.PaperSections.$content.css 'top': "#{window.PaperSections.scrollSpeed/2}px"
-			window.PaperSections.$content.css '-webkit-transform': "translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0)"
+			window.PaperSections.$content.attr 'style', "#{@transformPrefix}: translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0);transform: translate3d(0,#{window.PaperSections.scrollSpeed/2}px,0);"
 
 		TWEEN.update()
 
