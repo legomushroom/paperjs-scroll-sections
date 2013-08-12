@@ -82,8 +82,6 @@ class SSection
 
 
 		window.PaperSections.$container.on 'stopScroll', =>
-			console.clear()
-
 			window.PaperSections.stop = true
 			duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed*25), 1400) or 3000
 			@translatePointY(
@@ -387,10 +385,6 @@ $('.section-b').on 'mouseenter', ->
 $('.section-b').on 'click', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
-
-console.log window.PaperSections.win
-console.log window.PaperSections.ff
-console.log navigator
 
 if window.PaperSections.win or window.PaperSections.ff then window.PaperSections.$container.addClass 'is-with-scroll'
 

@@ -105,7 +105,6 @@ SSection = (function() {
     return window.PaperSections.$container.on('stopScroll', function() {
       var duration;
 
-      console.clear();
       window.PaperSections.stop = true;
       duration = window.PaperSections.slice(Math.abs(window.PaperSections.scrollSpeed * 25), 1400) || 3000;
       _this.translatePointY({
@@ -431,12 +430,10 @@ $('.section-b').on('click', function() {
   return window.PaperSections.sections.popSection($$.index());
 });
 
-console.log(window.PaperSections.win);
-
-console.log(window.PaperSections.ff);
-
-console.log(navigator);
-
 if (window.PaperSections.win || window.PaperSections.ff) {
   window.PaperSections.$container.addClass('is-with-scroll');
 }
+
+/*
+//@ sourceMappingURL=main.map
+*/
