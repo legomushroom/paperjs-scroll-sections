@@ -381,17 +381,6 @@ mwheel = function(e, d) {
   }
 };
 
-$(window).on('throttledresize', function() {
-  window.PaperSections.$container.off('scroll');
-  window.PaperSections.$container.off('mousewheel');
-  window.PaperSections.sections.teardown();
-  delete window.PaperSections.sections;
-  window.PaperSections.sections = new Sections;
-  view.setViewSize(window.PaperSections.$container.outerWidth(), window.PaperSections.data.sectionheight * window.PaperSections.data.sectionscount);
-  window.PaperSections.$container.scroll(window.PaperSections.scrollControl);
-  return window.PaperSections.$container.on('mousewheel', mwheel);
-});
-
 window.PaperSections.$container.on('mousewheel', mwheel);
 
 window.PaperSections.scrollControl = function(e, d) {
@@ -419,11 +408,11 @@ gui = new dat.GUI;
 
 gui.add(window.PaperSections, 'invertScroll');
 
-$('.section-b').on('mouseenter', function() {
+window.PaperSections.$container.on('mouseenter', '.section-b', function() {
   return window.PaperSections.currSection = $(this).index();
 });
 
-$('.section-b').on('click', function() {
+window.PaperSections.$container.on('click', '.section-b', function() {
   var $$;
 
   $$ = $(this);

@@ -300,15 +300,15 @@ mwheel = (e, d)->
 		e.stopPropagation()
 		e.preventDefault()
 
-$(window).on 'throttledresize', ->
-	window.PaperSections.$container.off 'scroll'
-	window.PaperSections.$container.off 'mousewheel'
-	window.PaperSections.sections.teardown()
-	delete window.PaperSections.sections
-	window.PaperSections.sections = new Sections
-	view.setViewSize window.PaperSections.$container.outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
-	window.PaperSections.$container.scroll window.PaperSections.scrollControl
-	window.PaperSections.$container.on 'mousewheel', mwheel
+# $(window).on 'throttledresize', ->
+# 	window.PaperSections.$container.off 'scroll'
+# 	window.PaperSections.$container.off 'mousewheel'
+# 	window.PaperSections.sections.teardown()
+# 	delete window.PaperSections.sections
+# 	window.PaperSections.sections = new Sections
+# 	view.setViewSize window.PaperSections.$container.outerWidth(), (window.PaperSections.data.sectionheight*(window.PaperSections.data.sectionscount)) 
+# 	window.PaperSections.$container.scroll window.PaperSections.scrollControl
+# 	window.PaperSections.$container.on 'mousewheel', mwheel
 
 window.PaperSections.$container.on 'mousewheel', mwheel
 
@@ -340,10 +340,10 @@ gui.add window.PaperSections, 'invertScroll'
 
 
 
-$('.section-b').on 'mouseenter', ->
+window.PaperSections.$container.on 'mouseenter', '.section-b', ->
 	window.PaperSections.currSection = $(@).index()
 
-$('.section-b').on 'click', ->
+window.PaperSections.$container.on 'click', '.section-b', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
 
