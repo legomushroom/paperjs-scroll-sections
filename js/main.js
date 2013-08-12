@@ -385,7 +385,6 @@ mwheel = function(e, d) {
 };
 
 $(window).on('throttledresize', function() {
-  console.log('resize');
   window.PaperSections.$container.off('scroll');
   window.PaperSections.$container.off('mousewheel');
   window.PaperSections.sections.teardown();
@@ -423,11 +422,11 @@ gui = new dat.GUI;
 
 gui.add(window.PaperSections, 'invertScroll');
 
-$('.section-b').on('mouseenter', function() {
+window.PaperSections.$container.on('mouseenter', '.section-b', function() {
   return window.PaperSections.currSection = $(this).index();
 });
 
-$('.section-b').on('click', function() {
+window.PaperSections.$container.on('click', '.section-b', function() {
   var $$;
 
   $$ = $(this);

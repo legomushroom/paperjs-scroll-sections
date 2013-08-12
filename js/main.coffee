@@ -301,7 +301,6 @@ mwheel = (e, d)->
 		e.preventDefault()
 
 $(window).on 'throttledresize', ->
-	console.log 'resize'
 	window.PaperSections.$container.off 'scroll'
 	window.PaperSections.$container.off 'mousewheel'
 	window.PaperSections.sections.teardown()
@@ -341,10 +340,10 @@ gui.add window.PaperSections, 'invertScroll'
 
 
 
-$('.section-b').on 'mouseenter', ->
+window.PaperSections.$container.on 'mouseenter', '.section-b', ->
 	window.PaperSections.currSection = $(@).index()
 
-$('.section-b').on 'click', ->
+window.PaperSections.$container.on 'click', '.section-b', ->
 	$$ = $(@)
 	window.PaperSections.sections.popSection $$.index()
 
